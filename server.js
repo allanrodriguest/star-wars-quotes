@@ -9,6 +9,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
   .then(client => {
     console.log('Connected to Database')
     const db = client.db('star-wars-quotes')
+    const quotesCollection = db.collection('quotes')
       app.use(bodyParser.urlencoded({ extended: true }))
 
       app.get('/', (req, res) => {
@@ -16,7 +17,11 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
       })
 
       app.post('/quotes', (req, res) => {
-        console.log(req.body)
+        quotesCollection.insertOne(req.body)
+        .then(result => {
+          res.redirect('/')
+        })
+        .catch(error => console.error(error))
       })
 
       app.listen(3000, () => {
