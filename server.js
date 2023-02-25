@@ -13,6 +13,11 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
       app.use(bodyParser.urlencoded({ extended: true }))
 
       app.get('/', (req, res) => {
+        db.collection('quotes').find().toArray()
+        .then(results => {
+          console.log(results);
+        })
+        .catch(err => console.error(err))
         res.sendFile(__dirname + '/index.html')
       })
 
